@@ -1,0 +1,45 @@
+vnfd:vnfd-catalog:
+    vnfd:
+    -   id: berlin
+        name: berlin
+        short-name: berlin
+        description: WIM example for OSM Hackfest
+        vendor: A. Magzoub, Lancaster University
+        version: '1.0'
+
+        mgmt-interface:
+            cp: berlin-cp0
+
+        vdu:
+        -   id: berlin
+            name: berlin
+            description: berlin
+            count: 1
+
+            vm-flavor:
+                vcpu-count: 2
+                memory-mb: 4096
+                storage-gb: 10
+
+            image: 'haproxy_ubuntu'
+
+            cloud-init-file: cloud-berlin
+
+            interface:
+            -   name: berlin_eth0
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: berlin-cp0
+            -   name: berlin_eth1
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: berlin-cp1
+
+        connection-point:
+        -   name: berlin-cp0
+            type: VPORT
+        -   name: berlin-cp1 
+            type: VPORT
+            port-security-enabled: false

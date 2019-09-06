@@ -1,0 +1,2 @@
+fa8e95fcfd54c73956523d6530447c74  athens_vnfd.yaml
+5235006138d43f9ce74d2d9df93e2ebd  cloud_init/cloud-athens

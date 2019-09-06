@@ -1,0 +1,55 @@
+nsd:nsd-catalog:
+    nsd:
+    -   id: wim2s
+        name: wim2s
+        short-name: wim2s
+        description: WIM example over 2 sites for OSM Hackfest
+        vendor: A. Magzoub, Lancaster University
+        version: '1.0'
+
+        constituent-vnfd:
+        -   member-vnf-index: 1
+            vnfd-id-ref: london
+        -   member-vnf-index: 2
+            vnfd-id-ref: athens
+
+        ip-profiles:
+        -   name: wim2subnet
+            description: IP-Subnet profile for pinging 
+            ip-profile-params:
+                ip-version: ipv4
+                subnet-address: 192.168.0.0/24
+                dhcp-params:
+                    enabled: true
+                    start-address: 192.168.0.1
+                    count: 3
+
+        vld:
+        -   id: osm-inet
+            name: osm-inet
+            short-name: osm-inet
+            type: ELAN
+            mgmt-network: 'true'
+            vnfd-connection-point-ref:
+            -   member-vnf-index-ref: 1
+                vnfd-id-ref: london
+                vnfd-connection-point-ref: london-cp0
+            -   member-vnf-index-ref: 2
+                vnfd-id-ref: athens
+                vnfd-connection-point-ref: athens-cp0
+
+
+        -   id: wim2net
+            name: wim2net
+            short-name: wim2net
+            type: ELAN
+            ip-profile-ref: wim2subnet
+            vnfd-connection-point-ref:
+            -   vnfd-id-ref: london               
+                member-vnf-index-ref: 1
+                vnfd-connection-point-ref: london-cp1                
+                ip-address: 192.168.0.2
+            -   vnfd-id-ref: athens
+                member-vnf-index-ref: 2
+                vnfd-connection-point-ref: athens-cp1                                    
+                ip-address: 192.168.0.3

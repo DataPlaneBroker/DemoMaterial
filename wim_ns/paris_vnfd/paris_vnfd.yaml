@@ -1,0 +1,45 @@
+vnfd:vnfd-catalog:
+    vnfd:
+    -   id: paris
+        name: paris
+        short-name: paris
+        description: WIM example for OSM Hackfest
+        vendor: A. Magzoub, Lancaster University
+        version: '1.0'
+
+        mgmt-interface:
+            cp: paris-cp0
+
+        vdu:
+        -   id: paris
+            name: paris
+            description: paris
+            count: 1
+
+            vm-flavor:
+                vcpu-count: 2
+                memory-mb: 4096
+                storage-gb: 10
+
+            image: 'haproxy_ubuntu'
+
+            cloud-init-file: cloud-paris
+
+            interface:
+            -   name: paris_eth0
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: paris-cp0
+            -   name: paris_eth1
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: paris-cp1
+
+        connection-point:
+        -   name: paris-cp0
+            type: VPORT
+        -   name: paris-cp1 
+            type: VPORT
+            port-security-enabled: false

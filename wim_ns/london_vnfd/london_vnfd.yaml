@@ -1,0 +1,45 @@
+vnfd:vnfd-catalog:
+    vnfd:
+    -   id: london
+        name: london
+        short-name: london
+        description: WIM example for OSM Hackfest
+        vendor: A. Magzoub, Lancaster University
+        version: '1.0'
+
+        mgmt-interface:
+            cp: london-cp0
+
+        vdu:
+        -   id: london
+            name: london
+            description: london
+            count: 1
+
+            vm-flavor:
+                vcpu-count: 2
+                memory-mb: 4096
+                storage-gb: 10
+
+            image: 'haproxy_ubuntu'
+
+            cloud-init-file: cloud-london
+
+            interface:
+            -   name: london_eth0
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: london-cp0
+            -   name: london_eth1
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: london-cp1
+
+        connection-point:
+        -   name: london-cp0
+            type: VPORT
+        -   name: london-cp1 
+            type: VPORT
+            port-security-enabled: false

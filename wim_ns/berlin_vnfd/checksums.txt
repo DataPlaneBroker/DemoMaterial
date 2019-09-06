@@ -1,0 +1,2 @@
+ffb36c6ecbfee11a7b271c1f5b94c3ad  berlin_vnfd.yaml
+d2a35367d30840ce60f2975bb9af7fdd  cloud_init/cloud-berlin

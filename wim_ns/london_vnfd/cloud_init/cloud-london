@@ -1,0 +1,61 @@
+#cloud-config - london
+password: osm
+chpasswd: { expire: False }
+ssh_pwauth: True
+
+users:
+  - name: ubuntu
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/ytsRnYehDFUX5nNhICnmR0IxtdFJjn9YAvO3CCx2FzLwOIRtMzUmHPbI3WQ+REyVZtUtdV9pHynO+E5gSolsWZrw9hJ4qT6+T078gayAIpp/i4tJtpOdJwUoOxf8w2AyIcbtH9DJwkv1y8Cx0hFh2TlBKmNnCsE0fGGYHlkusn1odYl1j9t3l037KW7KEpDMslSSYw0Hgbt02hU8sPDZdKpepOaHww+7sEln7ENf614KVdMNw/myvUjY4e3FF3FDqtnO5TUHbFkhCE3rPIm0K1YaAHFXVMibXkcsdvrsBUAiUr79aUAiaFumoutDi2ccaE5v9HPncU3xf5bu+zGP abubakrm@dyn-227-202.lancs.ac.uk
+
+runcmd:
+  -  'sudo ifconfig ens4 192.168.0.2 netmask 255.255.255.0'
+  -  'mkdir /home/ubuntu/bin'
+
+write_files:
+
+-   content: |
+        #!/bin/bash
+
+        sudo apt-get update
+        sudo apt-get upgrade
+        sudo apt-get clean
+        sudo apt-get autoclean
+        sudo apt-get autoremove
+
+    owner: root:root
+    permissions: '755'
+    path: /home/ubuntu/bin/update-ubuntu
+
+-   content: |
+        #!/bin/bash
+
+        echo "Pinging myself (London): "
+        ping -c 3 192.168.0.2
+        echo " "
+        echo "Pinging Athens: "
+        ping -c 3 192.168.0.3
+
+    owner: root:root
+    permissions: '755'
+    path: /home/ubuntu/bin/test-two-sites-connection 
+
+-   content: |
+        #!/bin/bash
+
+        echo "Pinging myself (London): "
+        ping -c 3 192.168.0.2
+        echo " "
+        echo "Pinging Athens: "
+        ping -c 3 192.168.0.3
+        echo " "
+        echo "Pinging Paris: "
+        ping -c 3 192.168.0.4
+        echo " "
+        echo "Pinging Berlin: "
+        ping -c 3 192.168.0.5
+
+    owner: root:root
+    permissions: '755'
+    path: /home/ubuntu/bin/test-four-sites-connection 
+

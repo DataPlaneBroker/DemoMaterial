@@ -1,0 +1,2 @@
+809c0f40cb66a166e03d9b42f710ab34  paris_vnfd.yaml
+87c75193c57e4772e56243eb95a145a4  cloud_init/cloud-paris

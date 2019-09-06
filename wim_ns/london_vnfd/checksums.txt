@@ -1,0 +1,2 @@
+c4c48f45ad91a59fb9979fc83fce0795  london_vnfd.yaml
+79119806899dce267f9d5cd61cf361aa  cloud_init/cloud-london

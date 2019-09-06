@@ -1,0 +1,45 @@
+vnfd:vnfd-catalog:
+    vnfd:
+    -   id: athens
+        name: athens
+        short-name: athens
+        description: WIM example for OSM Hackfest
+        vendor: A. Magzoub, Lancaster University
+        version: '1.0'
+
+        mgmt-interface:
+            cp: athens-cp0
+
+        vdu:
+        -   id: athens
+            name: athens
+            description: athens
+            count: 1
+
+            vm-flavor:
+                vcpu-count: 2
+                memory-mb: 4096
+                storage-gb: 10
+
+            image: 'haproxy_ubuntu'
+
+            cloud-init-file: cloud-athens
+
+            interface:
+            -   name: athens_eth0
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: athens-cp0
+            -   name: athens_eth1
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: athens-cp1
+
+        connection-point:
+        -   name: athens-cp0
+            type: VPORT
+        -   name: athens-cp1 
+            type: VPORT
+            port-security-enabled: false
