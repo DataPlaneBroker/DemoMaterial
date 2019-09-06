@@ -1,0 +1,3 @@
+2f5afe64086998240cff9884c01b2054  client_vnfd.yaml
+72291c59b06f42116e81428abf188124  cloud_init/cloud-init-1
+7b28e48f2d1ef4472d1b92f8a7eefe85  icons/icon.png

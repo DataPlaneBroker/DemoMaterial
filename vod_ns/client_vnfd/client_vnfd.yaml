@@ -1,0 +1,89 @@
+vnfd:vnfd-catalog:
+    vnfd:
+    -   id: client_vnf
+        name: client_vnf
+        short-name: client
+        description: The client (i.e.the traffic generator) for the Video-on-Demand virtual-network-function.
+        vendor: A. Magzoub, Lancaster University
+        version: '1.0'
+        logo: icon.png   
+
+        mgmt-interface:
+            cp: client_mgmt_cp
+
+        vdu: 
+        -   id: client
+            name: client
+            description: client to stress the load-balancer 
+            count: 1
+            image: 'haproxy_ubuntu'
+
+            cloud-init-file: cloud-init-1
+
+            vm-flavor: 
+                
+                vcpu-count: 1
+                memory-mb: 8000
+                storage-gb: 10 
+              
+            interface:
+            -   name: client_mgmt_int
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: client_mgmt_cp
+                mgmt-interface: true 
+                position: '1' 
+
+            -   name: client_public_int
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: client_public_cp
+                position: '2' 
+
+
+        connection-point:        
+            -   name: client_mgmt_cp
+                type: VPORT      
+            -   name: client_public_cp
+                type: VPORT   
+                port-security-enabled: false
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

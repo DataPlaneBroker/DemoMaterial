@@ -1,0 +1,87 @@
+#cloud-config - client
+password: osm
+chpasswd: { expire: False }
+ssh_pwauth: True
+
+users:
+  - name: ubuntu
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/ytsRnYehDFUX5nNhICnmR0IxtdFJjn9YAvO3CCx2FzLwOIRtMzUmHPbI3WQ+REyVZtUtdV9pHynO+E5gSolsWZrw9hJ4qT6+T078gayAIpp/i4tJtpOdJwUoOxf8w2AyIcbtH9DJwkv1y8Cx0hFh2TlBKmNnCsE0fGGYHlkusn1odYl1j9t3l037KW7KEpDMslSSYw0Hgbt02hU8sPDZdKpepOaHww+7sEln7ENf614KVdMNw/myvUjY4e3FF3FDqtnO5TUHbFkhCE3rPIm0K1YaAHFXVMibXkcsdvrsBUAiUr79aUAiaFumoutDi2ccaE5v9HPncU3xf5bu+zGP abubakrm@dyn-227-202.lancs.ac.uk
+
+runcmd:
+  -  'sudo ifconfig ens4 192.168.10.5 netmask 255.255.255.0'
+  -  'sudo ip route add 192.168.20.0/24 via 192.168.10.15'
+  -  'mkdir /home/ubuntu/bin'
+  -  'mkdir /home/ubuntu/work'
+  -  'ulimit -n 10000'
+  -  'cd /home/ubuntu/work && git clone https://github.com/crotsos/yet-another-traffic-gen.git'
+
+write_files:
+
+-   content: |
+        #!/bin/bash
+
+        sudo apt-get update
+        sudo apt-get upgrade
+        sudo apt-get clean
+        sudo apt-get autoclean
+        sudo apt-get autoremove
+
+    owner: root:root
+    permissions: '755'
+    path: /home/ubuntu/bin/update-ubuntu
+
+-   content: |
+        #!/bin/bash
+        
+        LOAD_BALANCER="192.168.20.35"
+        REQUESTS="10000000"
+        CONCURRENCES="20"
+        echo " "
+        echo "Stressing: " $LOAD_BALANCER
+        echo "Requests: " $REQUESTS
+        echo "Concurrences: " $CONCURRENCES
+        echo " "
+        sudo ab -k -n $REQUESTS -c $CONCURRENCES http://$LOAD_BALANCER/
+
+    owner: root:root
+    permissions: '755'
+    path: /home/ubuntu/bin/stress
+
+-   content: |
+        #!/bin/bash
+
+        LOAD_BALANCER="192.168.20.35"
+        echo " "
+        echo "Stressing: " $LOAD_BALANCER
+        read -p "Enter number of requests: " REQUESTS
+        read -p "Enter number of concurrences: " CONCURRENCES
+        echo " "
+        sudo ab -k -n $REQUESTS -c $CONCURRENCES http://$LOAD_BALANCER/
+
+    owner: root:root
+    permissions: '755'
+    path: /home/ubuntu/bin/stress-customized 
+
+-   content: |
+        #!/bin/bash
+
+        ping -c 3 192.168.10.5
+        ping -c 3 192.168.10.15
+        ping -c 3 192.168.20.25
+        ping -c 3 192.168.20.35
+
+    owner: root:root
+    permissions: '755'
+    path: /home/ubuntu/bin/ctc
+
+-   content: |
+        #!/bin/bash
+
+        curl 192.168.20.35
+
+    owner: root:root
+    permissions: '755'
+    path: /home/ubuntu/bin/curlb
+
+

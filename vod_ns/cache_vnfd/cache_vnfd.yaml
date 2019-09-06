@@ -1,0 +1,88 @@
+vnfd:vnfd-catalog:
+    vnfd:
+    -   id: cache_vnf
+        name: cache_vnf
+        short-name: cache
+        description: The cache-node(s) for the Video-on-Demand virtual-network-function.
+        vendor: A. Magzoub, Lancaster University
+        version: '1.0'
+        logo: icon.png   
+
+        connection-point:        
+            -   name: cache_mgmt_cp
+                type: VPORT      
+            -   name: cache_edge_cp
+                type: VPORT 
+                port-security-enabled: false
+
+        mgmt-interface:
+            cp: cache_mgmt_cp
+
+        vdu: 
+        -   id: cache
+            name: cache
+            description: cache-node(s)
+            count: 1
+            image: 'apache_ubuntu'
+
+            cloud-init-file: cloud-init-1
+
+            monitoring-param:  
+            -   id: "cache_cpu_util" 
+                nfvi-metric: "cpu_utilization" 
+
+            -   id: "cache_memory_util" 
+                nfvi-metric: "average_memory_utilization"             
+
+            vm-flavor: 
+                vcpu-count: 1
+                memory-mb: 2048
+                storage-gb: 10  
+              
+            interface:
+            -   name: cache_mgmt_int
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: cache_mgmt_cp
+                mgmt-interface: true 
+                position: '1' 
+
+            -   name: cache_edge_int
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: cache_edge_cp
+                position: '2' 
+
+        monitoring-param: 
+        -   id: "cache_vnf_cpu_util" 
+            name: "cache_vnf_cpu_util" 
+            aggregation-type: AVERAGE 
+            vdu-monitoring-param:  
+                vdu-ref: "cache" 
+                vdu-monitoring-param-ref: "cache_cpu_util" 
+
+        scaling-group-descriptor:  
+        -   name: "apache_autoscale" 
+            min-instance-count: 0 
+            max-instance-count: 10 
+            scaling-policy: 
+            -   name: "apache_cpu_util_above_threshold" 
+                scaling-type: "automatic" 
+                threshold-time: 10 
+                cooldown-time: 120 
+                scaling-criteria: 
+                -   name: "apache_cpu_util_above_threshold" 
+                    scale-in-threshold: 20 
+                    scale-in-relational-operation: "LT" 
+                    scale-out-threshold: 50
+                    scale-out-relational-operation: "GT" 
+                    vnf-monitoring-param-ref: "cache_vnf_cpu_util" 
+
+            vdu: 
+            -   vdu-id-ref: cache
+                count: 1
+
+
+

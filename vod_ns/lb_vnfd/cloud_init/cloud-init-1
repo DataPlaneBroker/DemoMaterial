@@ -1,0 +1,63 @@
+#cloud-config - lb
+password: osm
+chpasswd: { expire: False }
+ssh_pwauth: True
+
+users:
+  - name: ubuntu
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/ytsRnYehDFUX5nNhICnmR0IxtdFJjn9YAvO3CCx2FzLwOIRtMzUmHPbI3WQ+REyVZtUtdV9pHynO+E5gSolsWZrw9hJ4qT6+T078gayAIpp/i4tJtpOdJwUoOxf8w2AyIcbtH9DJwkv1y8Cx0hFh2TlBKmNnCsE0fGGYHlkusn1odYl1j9t3l037KW7KEpDMslSSYw0Hgbt02hU8sPDZdKpepOaHww+7sEln7ENf614KVdMNw/myvUjY4e3FF3FDqtnO5TUHbFkhCE3rPIm0K1YaAHFXVMibXkcsdvrsBUAiUr79aUAiaFumoutDi2ccaE5v9HPncU3xf5bu+zGP abubakrm@dyn-227-202.lancs.ac.uk
+
+runcmd:
+  -  'sudo ifconfig ens4 192.168.20.35 netmask 255.255.255.0' 
+  -  'sudo ifconfig ens5 192.168.28.2 netmask 255.255.255.240'
+  -  'sudo ip route add 192.168.10.0/24 via 192.168.20.25'
+  -  'mkdir /home/ubuntu/bin'
+
+write_files:
+
+-   content: |
+        #!/bin/bash
+
+        sudo apt-get update
+        sudo apt-get upgrade
+        sudo apt-get clean
+        sudo apt-get autoclean
+        sudo apt-get autoremove
+
+    owner: root:root
+    permissions: '755'
+    path: /home/ubuntu/bin/update-ubuntu
+
+-   content: |
+        #!/bin/bash
+
+        ping -c 3 192.168.20.35
+        ping -c 3 192.168.20.25
+        ping -c 3 192.168.10.15
+        ping -c 3 192.168.28.2
+        ping -c 3 192.168.28.3
+
+    owner: root:root
+    permissions: '755'
+    path: /home/ubuntu/bin/ctc
+
+-   content: |
+        #!/bin/bash
+
+        curl 192.168.28.3 
+
+        curl 192.168.28.5 
+        curl 192.168.28.6 
+        curl 192.168.28.7 
+        curl 192.168.28.8 
+        curl 192.168.28.9 
+        curl 192.168.28.10 
+        curl 192.168.28.11 
+        curl 192.168.28.12 
+        curl 192.168.28.13 
+        curl 192.168.28.14
+
+    owner: root:root
+    permissions: '755'
+    path: /home/ubuntu/bin/curlb

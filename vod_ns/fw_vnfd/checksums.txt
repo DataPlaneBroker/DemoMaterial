@@ -1,0 +1,3 @@
+c9534a694c22d5b613dd1a2834686967  fw_vnfd.yaml
+005e70ee61d03e130c692fbe52c341c7  cloud_init/cloud-init-1
+7b28e48f2d1ef4472d1b92f8a7eefe85  icons/icon.png

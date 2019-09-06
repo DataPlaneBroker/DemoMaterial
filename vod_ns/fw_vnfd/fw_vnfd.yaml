@@ -1,0 +1,87 @@
+vnfd:vnfd-catalog:
+    vnfd:
+    -   id: fw_vnf
+        name: fw_vnf
+        short-name: fw
+        description: The firewall of the Video-on-Demand virtual-network-function.
+        vendor: A. Magzoub, Lancaster University
+        version: '1.0'
+        logo: icon.png   
+
+        connection-point:        
+            -   name: fw_mgmt_cp
+                type: VPORT      
+            -   name: fw_public_cp
+                type: VPORT
+                port-security-enabled: false
+            -   name: fw_core_cp
+                type: VPORT   
+                port-security-enabled: false 
+
+        mgmt-interface:
+            cp: fw_mgmt_cp
+
+        vdu: 
+        -   id: fw
+            name: fw
+            description: firewall 
+            count: 1
+            image: 'ubuntu-cloud'
+
+            cloud-init-file: cloud-init-1
+
+            vm-flavor: 
+                vcpu-count: 1
+                memory-mb: 4096
+                storage-gb: 10 
+              
+            interface:
+            -   name: fw_mgmt_int
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: fw_mgmt_cp
+                mgmt-interface: true 
+                position: '1' 
+
+            -   name: fw_public_int
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: fw_public_cp
+                position: '2' 
+
+            -   name: fw_core_int
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: fw_core_cp
+                position: '3' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

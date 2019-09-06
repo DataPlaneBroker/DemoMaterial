@@ -1,0 +1,89 @@
+vnfd:vnfd-catalog:
+    vnfd:
+    -   id: lb_vnf
+        name: lb_vnf
+        short-name: lb
+        description: The load-balancer of the Video-on-Demand virtual-network-function.
+        vendor: A. Magzoub, Lancaster University
+        version: '1.0'
+        logo: icon.png   
+
+        connection-point:        
+            -   name: lb_mgmt_cp
+                type: VPORT      
+            -   name: lb_core_cp
+                type: VPORT
+                port-security-enabled: false
+            -   name: lb_edge_cp
+                type: VPORT   
+                port-security-enabled: false 
+
+        mgmt-interface:
+            cp: lb_mgmt_cp
+
+        vdu:
+        -   id: lb
+            name: lb
+            description: load-balancer 
+            count: 1
+            image: 'haproxy_ubuntu'
+
+            cloud-init-file: cloud-init-1
+
+            vm-flavor: 
+                vcpu-count: 1
+                memory-mb: 4096
+                storage-gb: 10 
+              
+            interface:
+            -   name: lb_mgmt_int
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: lb_mgmt_cp
+                mgmt-interface: true 
+                position: '1' 
+
+            -   name: lb_core_int0
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: lb_core_cp
+                position: '2' 
+
+            -   name: lb_edge_int1
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: lb_edge_cp
+                position: '3' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

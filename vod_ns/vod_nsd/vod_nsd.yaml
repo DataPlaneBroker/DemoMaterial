@@ -1,0 +1,133 @@
+nsd:nsd-catalog:
+    nsd:
+    -   id: vod_ns
+        name: vod_ns
+        short-name: vod
+        description: Video-on-Demand network-service.
+        vendor: A. Magzoub, Lancaster University
+        version: '1.0'
+        logo: icon.png        
+        constituent-vnfd:
+        -   member-vnf-index: 1
+            vnfd-id-ref: client_vnf
+        -   member-vnf-index: 2
+            vnfd-id-ref: fw_vnf
+        -   member-vnf-index: 3
+            vnfd-id-ref: lb_vnf
+        -   member-vnf-index: 4
+            vnfd-id-ref: cache_vnf
+        -   member-vnf-index: 5
+            vnfd-id-ref: cache_vnf
+
+        ip-profiles:
+        -   name: profile_public
+            description: Subnet profile for public network connections 
+            ip-profile-params:
+                ip-version: ipv4
+                subnet-address: 192.168.10.0/24
+                dhcp-params:
+                    enabled: true
+                    start-address: 192.168.10.1
+                    count: 15
+
+        -   name: profile_core
+            description: Subnet profile for the connection between FW & LB 
+            ip-profile-params:
+                ip-version: ipv4
+                subnet-address: 192.168.20.0/24
+                dhcp-params:
+                    enabled: true
+                    start-address: 192.168.20.1
+                    count: 35
+
+        -   name: profile_wim
+            description: Subnet profile for the connection between LB & cache-node(s)
+            ip-profile-params:
+                ip-version: ipv4
+                subnet-address: 192.168.28.0/28
+                dhcp-params:
+                    enabled: true
+                    start-address: 192.168.28.4
+                    count: 11
+            
+        vld:        
+        -   id: osm-inet            
+            name: osm-inet
+            short-name: osm-inet
+            description: Managment network 
+            version: '1.0'
+            type: ELAN
+            vim-network-name: osm-inet             
+            mgmt-network: 'true'        
+            vnfd-connection-point-ref:
+            -   vnfd-id-ref: client_vnf
+                member-vnf-index-ref: '1'
+                vnfd-connection-point-ref: client_mgmt_cp
+            -   vnfd-id-ref: fw_vnf
+                member-vnf-index-ref: '2'
+                vnfd-connection-point-ref: fw_mgmt_cp
+            -   vnfd-id-ref: lb_vnf
+                member-vnf-index-ref: '3'
+                vnfd-connection-point-ref: lb_mgmt_cp
+            -   vnfd-id-ref: cache_vnf
+                member-vnf-index-ref: '4'
+                vnfd-connection-point-ref: cache_mgmt_cp
+            -   vnfd-id-ref: cache_vnf
+                member-vnf-index-ref: '5'
+                vnfd-connection-point-ref: cache_mgmt_cp
+
+
+        -   id: public
+            ip-profile-ref: profile_public          
+            name: public
+            short-name: public
+            description: Public network for clients 
+            version: '1.0'
+            type: ELAN
+            vnfd-connection-point-ref:
+            -   vnfd-id-ref: client_vnf
+                member-vnf-index-ref: '1'
+                vnfd-connection-point-ref: client_public_cp
+                ip-address: 192.168.10.5
+            -   vnfd-id-ref: fw_vnf
+                member-vnf-index-ref: '2'
+                vnfd-connection-point-ref: fw_public_cp
+                ip-address: 192.168.10.15
+
+        -   id: core 
+            ip-profile-ref: profile_core        
+            name: core
+            short-name: core
+            description: core network between LB and FW 
+            version: '1.0'
+            type: ELAN
+            vnfd-connection-point-ref:
+            -   vnfd-id-ref: fw_vnf
+                member-vnf-index-ref: '2'
+                vnfd-connection-point-ref: fw_core_cp
+                ip-address: 192.168.20.25
+            -   vnfd-id-ref: lb_vnf
+                member-vnf-index-ref: '3'
+                vnfd-connection-point-ref: lb_core_cp
+                ip-address: 192.168.20.35
+
+        -   id: wim
+            ip-profile-ref: profile_wim       
+            name: wim
+            short-name: wim
+            description: wim network for caches 
+            version: '1.0'
+            type: ELAN
+            vnfd-connection-point-ref:
+            -   vnfd-id-ref: lb_vnf
+                member-vnf-index-ref: '3'
+                vnfd-connection-point-ref: lb_edge_cp
+                ip-address: 192.168.28.2
+            -   vnfd-id-ref: cache_vnf
+                member-vnf-index-ref: '4'
+                vnfd-connection-point-ref: cache_edge_cp
+                ip-address: 192.168.28.3
+                
+            -   vnfd-id-ref: cache_vnf
+                member-vnf-index-ref: '5'
+                vnfd-connection-point-ref: cache_edge_cp
